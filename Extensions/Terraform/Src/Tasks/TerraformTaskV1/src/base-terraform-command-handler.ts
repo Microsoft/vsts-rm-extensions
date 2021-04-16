@@ -131,21 +131,19 @@ export abstract class BaseTerraformCommandHandler {
     }
 
     public setOutputVariableToPlanFilePath() {
-        // Do terraform version to check if version is >= 0.12.0
-        if (this.checkIfShowCommandSupportsJsonOutput() >= 0) {
-            let terraformTool;
-            let fileStream;
-
-            // Do terraform plan with -out flag to output the binary plan file
-            const binaryPlanFilePath = path.resolve(`plan-binary-${uuidV4()}.tfplan`);
-            const tempFileForPlanOutput = path.resolve(`temp-plan-${uuidV4()}.txt`);
-
-            let serviceName = `environmentServiceName${this.getServiceProviderNameFromProviderInput()}`;
-            let planCommand = new TerraformAuthorizationCommandInitializer(
-                "plan",
-                tasks.getInput("workingDirectory"),
-                tasks.getInput(serviceName, true),
-                `${tasks.getInput("commandOptions")} -out=${binaryPlanFilePath}`
+        let terraformTool;
+        let fileStream;
+        
+        // Do terraform plan with -out flag to output the binary plan file
+        const binaryPlanFilePath = path.resolve(`plan-binary-${uuidV4()}.tfplan`);
+        const tempFileForPlanOutput = path.resolve(`temp-plan-${uuidV4()}.txt`);
+        
+        let serviceName = `environmentServiceName${this.getServiceProviderNameFromProviderInput()}`;
+        let planCommand = new TerraformAuthorizationCommandInitializer(
+            "plan",
+            tasks.getInput("workingDirectory"),
+            tasks.getInput(serviceName, true),
+            `${tasks.getInput("commandOptions")} -out=${binaryPlanFilePath}`
             );
             terraformTool = this.terraformToolHandler.createToolRunner(planCommand);
             this.handleProvider(planCommand);
@@ -154,7 +152,7 @@ export abstract class BaseTerraformCommandHandler {
                 cwd: planCommand.workingDirectory,
                 outStream: fileStream
             });
-
+            
             // Do terraform show with -json flag to output the json plan file
             const jsonPlanFilePath = path.resolve(`plan-json-${uuidV4()}.json`);
             const tempFileForJsonPlanOutput = path.resolve(`temp-plan-json-${uuidV4()}.json`)
@@ -163,40 +161,42 @@ export abstract class BaseTerraformCommandHandler {
                 "show",
                 tasks.getInput("workingDirectory"),
                 `-json ${binaryPlanFilePath}`
-            );
-            terraformTool = this.terraformToolHandler.createToolRunner(showCommand);
-            fileStream = fs.createWriteStream(tempFileForJsonPlanOutput);
-            commandOutput = terraformTool.execSync(<IExecSyncOptions>{
-                cwd: showCommand.workingDirectory,
-                outStream: fileStream
-            });
-
-            // Write command output to the json plan file
-            tasks.writeFile(jsonPlanFilePath, commandOutput.stdout);
-            // Set the output variable to the json plan file path
-            tasks.setVariable('jsonPlanFilePath', jsonPlanFilePath);
-
-            // Delete all the files that are not needed any further
-            if (tasks.exist(binaryPlanFilePath)) {
-                tasks.rmRF(binaryPlanFilePath);
+                );
+                terraformTool = this.terraformToolHandler.createToolRunner(showCommand);
+                fileStream = fs.createWriteStream(tempFileForJsonPlanOutput);
+                commandOutput = terraformTool.execSync(<IExecSyncOptions>{
+                    cwd: showCommand.workingDirectory,
+                    outStream: fileStream
+                });
+                
+                // Write command output to the json plan file
+                tasks.writeFile(jsonPlanFilePath, commandOutput.stdout);
+                // Set the output variable to the json plan file path
+                tasks.setVariable('jsonPlanFilePath', jsonPlanFilePath);
+                
+                // Delete all the files that are not needed any further
+                if (tasks.exist(binaryPlanFilePath)) {
+                    tasks.rmRF(binaryPlanFilePath);
+                }
+                
+                if (tasks.exist(tempFileForPlanOutput)) {
+                    tasks.rmRF(tempFileForPlanOutput);
+                }
+                
+                if (tasks.exist(tempFileForJsonPlanOutput)) {
+                    tasks.rmRF(tempFileForJsonPlanOutput);
+                }
             }
-
-            if (tasks.exist(tempFileForPlanOutput)) {
-                tasks.rmRF(tempFileForPlanOutput);
-            }
-
-            if (tasks.exist(tempFileForJsonPlanOutput)) {
-                tasks.rmRF(tempFileForJsonPlanOutput);
-            }
-
-        } else {
-            tasks.warning("Terraform show command does not support -json flag for terraform versions older than 0.12.0. The output variable named 'jsonPlanFilePath' was not set.")
-        }
-    }
-
+            
+            
     public async plan(): Promise<number> {
-        await this.onlyPlan();
-        this.setOutputVariableToPlanFilePath();
+        // Executes plan with output if terraform version >= 0.12.0
+        if(this.checkIfShowCommandSupportsJsonOutput() >= 0) {
+            this.setOutputVariableToPlanFilePath();
+        } else {
+            tasks.warning("Terraform show command does not support -json flag for terraform versions older than 0.12.0, so plan command will be run with no output.");
+            await this.onlyPlan();
+        }
 
         return Promise.resolve(0);
     }

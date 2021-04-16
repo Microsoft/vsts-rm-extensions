@@ -13,8 +13,8 @@
     "demands": [],
     "version": {
         "Major": "0",
-        "Minor": "0",
-        "Patch": "140"
+        "Minor": "178",
+        "Patch": "0"
     },
     "instanceNameFormat": "Terraform : $(provider)",
     "execution": {
