@@ -1183,7 +1183,7 @@ describe('Terraform Test Suite', () => {
             assert(tr.invokedToolCount === 1, 'should have invoked tool one time. actual: ' + tr.invokedToolCount);
             assert(tr.errorIssues.length === 0, 'should have no errors');
             assert(tr.warningIssues.length === 1, 'should have one warning');  
-            assert(tr.createdWarningIssue('Multiple provider blocks specified in the .tf files in the current working drectory.'), 'Should have created warning: Multiple provider blocks specified in the .tf files in the current working drectory.');  
+            assert(tr.createdWarningIssue('Multiple provider blocks specified in the .tf files in the current working directory.'), 'Should have created warning: Multiple provider blocks specified in the .tf files in the current working directory.');
 
             done();
         } catch(error) {

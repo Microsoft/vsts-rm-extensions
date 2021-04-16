@@ -53,10 +53,10 @@ export abstract class BaseTerraformCommandHandler {
             cwd: tasks.getInput("workingDirectory")
         });
 
-        let countProviders = (commandOutput.stdout.match(/provider/g) || []).length;
+        let countProviders = ["aws", "azurerm", "google"].filter(provider => commandOutput.stdout.includes(provider)).length
         tasks.debug(countProviders.toString());
         if (countProviders > 1) {
-            tasks.warning("Multiple provider blocks specified in the .tf files in the current working drectory.");
+            tasks.warning("Multiple provider blocks specified in the .tf files in the current working directory.");
         }
     }
 
