@@ -14,7 +14,7 @@
     "version": {
         "Major": "0",
         "Minor": "0",
-        "Patch": "140"
+        "Patch": "143"
     },
     "instanceNameFormat": "Terraform : $(provider)",
     "execution": {
@@ -253,6 +253,10 @@
         {
             "name": "jsonPlanFilePath",
             "description": "The location of the terraform plan file in JSON format that was created. This file can be used by tasks which are written for tools such as [Open Policy Agent](https://www.openpolicyagent.org/docs/latest/terraform/)<br><br>Note: This variable will only be set if 'command' input is set to 'plan'."
+        },
+        {
+            "name": "changesPresent",
+            "description": "A boolean indicating if the terraform plan found any changes to apply."
         },
         {
             "name": "jsonOutputVariablesPath",

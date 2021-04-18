@@ -118,7 +118,7 @@ export abstract class BaseTerraformCommandHandler {
             "plan",
             tasks.getInput("workingDirectory"),
             tasks.getInput(serviceName, true),
-            tasks.getInput("commandOptions")
+            `${tasks.getInput("commandOptions")} -detailed-exitcode`
         );
         
         let terraformTool;
@@ -196,6 +196,7 @@ export abstract class BaseTerraformCommandHandler {
 
     public async plan(): Promise<number> {
         await this.onlyPlan();
+        tasks.setVariable('changesPresent', exitCode === 2);
         this.setOutputVariableToPlanFilePath();
 
         return Promise.resolve(0);
