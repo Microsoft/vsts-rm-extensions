@@ -3,7 +3,7 @@
     "id": "custom-terraform-tasks",
     "name": "Terraform",
     "version": "0.1.5",
-    "publisher": "ms-devlabs",
+    "publisher": "teilmeier",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
