@@ -13,7 +13,7 @@
   "loc.input.label.workingDirectory": "Configuration directory",
   "loc.input.help.workingDirectory": "Directory containing the Terraform configuration files. The default value is $(System.DefaultWorkingDirectory)",
   "loc.input.label.commandOptions": "Additional command arguments",
-  "loc.input.help.commandOptions": "Any additional arguments for the selected command such as '-option=value' or '-flag'. Multiple options can also be provided delimited by spaces.<br><br>Examples:<br>-out=tfplan (for terraform plan)<br>tfplan -auto-approve (for terraform apply)",
+  "loc.input.help.commandOptions": "Any additional arguments for the selected command such as '-option=value' or '-flag'. Multiple options can also be provided delimited by spaces.<br><br>Examples:<br>-out=tfplan (for terraform plan)<br>-auto-approve tfplan (for terraform apply)",
   "loc.input.label.environmentServiceNameAzureRM": "Azure subscription",
   "loc.input.help.environmentServiceNameAzureRM": "Select an Azure Resource Manager subscription for the deployment",
   "loc.input.label.environmentServiceNameAWS": "Amazon Web Services connection",
