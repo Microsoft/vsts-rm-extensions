@@ -56,7 +56,7 @@ export abstract class BaseTerraformCommandHandler {
         let countProviders = (commandOutput.stdout.match(/provider/g) || []).length;
         tasks.debug(countProviders.toString());
         if (countProviders > 1) {
-            tasks.warning("Multiple provider blocks specified in the .tf files in the current working drectory.");
+            tasks.warning("Multiple provider blocks specified in the .tf files in the current working directory.");
         }
     }
 
