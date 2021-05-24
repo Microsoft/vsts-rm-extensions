@@ -19,7 +19,7 @@
     "gulp-unzip": "0.1.4",
     "gulp-util": "^3.0.7",
     "minimatch": "3.0.2",
-    "minimist": "1.1.1",
+    "minimist": "1.2.3",
     "mocha": "^5.2.0",
     "q": "^1.4.1",
     "request": "^2.88.0",
