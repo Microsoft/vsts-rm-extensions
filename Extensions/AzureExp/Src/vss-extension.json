@@ -17,22 +17,9 @@
             "path": "Tasks/ManageExperimentV1"
         },
         {
-			"path": "UIContribution/static/index.html",
+			"path": "UIContribution/dist",
 			"addressable": true
-        },
-        {
-			"path": "UIContribution/scripts/main.js",
-			"addressable": true
-        },
-        {
-			"path": "UIContribution/scripts/experimentOverview.js",
-			"addressable": true
-        },
-        {
-			"path": "UIContribution/node_modules/vss-web-extension-sdk/lib",
-			"addressable": true,
-			"packagePath": "UIContribution/lib"
-		}
+        }
     ],
     "targets": [
         {
@@ -40,6 +27,41 @@
         }
     ],
     "contributions": [
+        {
+            "id": "exp-endpoint-type",
+            "description": "i18n: Service Connection for Exp",
+            "type": "ms.vss-endpoint.service-endpoint-type",
+            "targets": [
+				"ms.vss-endpoint.endpoint-types"
+            ],
+            "properties": {
+                "name": "expserviceconnection",
+                "displayName": "Exp Service Connection",
+                "url": "https://exp.microsoft.com/",
+                "authenticationSchemes": [
+                    {
+                        "type": "ms.vss-endpoint.endpoint-auth-scheme-service-principal"
+                    }
+                ],
+                "dataSources": [
+                    {
+                    	"name": "GetExpProgression",
+                    	"endpointUrl": "{{{endpoint.url}}}/api/2.0/features/{{{FeatureId}}}/progressions/{{{ProgressionId}}}",
+                    	"resultSelector": "jsonpath:$"
+                    },
+                    {
+                        "name": "GetExpFeature",
+                        "endpointUrl": "{{{endpoint.url}}}/api/features/{{{FeatureId}}}",
+                        "resultSelector": "jsonpath:$"
+                    },
+                    {
+                        "name": "GetExpScorecards",
+                        "endpointUrl": "{{{endpoint.url}}}/api/experiments/scorecards/feature/{{{FeatureId}}}",
+                        "resultSelector": "jsonpath:$"
+                    }
+                ]      
+            }
+        },
         {
             "id": "provisionexperiment-task",
             "type": "ms.vss-distributed-task.task",
@@ -61,20 +83,20 @@
             }
         },
         {
-			"id": "azureexp-OverviewTab",
+			"id": "exp-experimentationoverviewtab",
 			"type": "ms.vss-web.tab",
 			"targets": [
 				"ms.vss-releaseManagement-web.release-environment-editor-tab"
 			],
 			"properties": {
-				"name": "Experiment Overview",
+				"name": "Experimentation Overview",
 				"description": "Shows the experiment overview",
-				"uri": "UIContribution/static/index.html",
+				"uri": "UIContribution/dist/index.html",
                 "registeredObjectId": "registeredEnvironmentObject",
                 "order": "9999",
 				"dynamic": true
 			}
-		}
+        }
     ],
     "scopes": [
 		"vso.build",

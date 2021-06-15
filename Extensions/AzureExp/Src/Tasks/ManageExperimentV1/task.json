@@ -1,5 +1,5 @@
 {
-    "id": "58b25f39-9b53-44ce-b6d1-08ef854e905b",
+    "id": "36e2b610-65b3-4882-a173-572a943990d3",
     "name": "ManageExperiment",
     "friendlyName": "Manage Experiment",
     "description": "Manage Experiments in Control Tower",
@@ -16,13 +16,12 @@
         "Patch": 0
     },
     "minimumAgentVersion": "1.95.0",
-    "instanceNameFormat": "$(Action) Experiment",
+    "instanceNameFormat": "Manage experiment - $(Action)",
     "inputs": [
         {
             "name": "ServiceConnectionId",
-            "aliases": ["azureSubscription"],
-            "type": "connectedService:AzureRM",
-            "label": "Azure Subscription",
+            "type": "connectedService:expserviceconnection",
+            "label": "Exp Service Connection",
             "required": true,
             "helpMarkDown": "Select the Azure Resource Manager subscription for the deployment."
         },
@@ -41,23 +40,25 @@
             "helpMarkDown": "Progression Id of the experiment to manage."
         },
         {
-            "name": "ExperimentName",
-            "type": "string",
-            "label": "Experiment Name",
-            "required": true,
-            "helpMarkDown": "Name of the experiment to manage."
-        },
-        {
             "name": "Action",
             "type": "pickList",
             "label": "Action",
             "required": true,
             "options": {
-                "Start": "Start the experiment",
-				"Advance": "Advance the experiment",
-                "Stop": "Stop the experiment"
+                "Start": "Start experiment",
+                "Advance": "Advance experiment",
+                "Stop": "Stop experiment",
+                "StopAllExperiments": "Stop all experiments"
             },
             "helpMarkDown": "Select the action you want to perform"
+        },
+        {
+            "name": "ExperimentName",
+            "type": "string",
+            "label": "Experiment Name",
+            "required": true,
+            "helpMarkDown": "Name of the experiment to manage.",
+            "visibleRule": "Action = Start || Action = Stop || Action = Advance"
         }
     ],
     "execution": {
@@ -67,10 +68,14 @@
     },
     "messages": {
         "InvalidAction": "Invalid Action %s",
-        "InitiateAction": "Initiate action %s on experiment %s",
-        "InitiatedAction": "Initiated action %s on experiment %s",
+        "InitiateAction": "Initiate action %s on experiment %s (%s)",
+        "InitiatedAction": "Initiated action %s on experiment %s (%s)",
         "ExperimentNotFound": "Unable to find experiment %s in progression %s",
         "UnableToFetchAccessTokenNullResponse": "Unable to fetch access token. The response body is empty. %s",
-        "UnableToFetchAccessToken": "Unable to fetch access token. Check if the service principal credentials are valid and have appropriate permissions. %s %s"
+        "UnableToFetchAccessToken": "Unable to fetch access token. Check if the service principal credentials are valid and have appropriate permissions. Status Code: %s %s",
+        "NoExperimentsFound": "No experiments found in the progression '%s' and feature '%s'",
+        "NoExperimentWithNameFound": "Experiment '%s' not found in the progression '%s' and feature '%s'",
+        "MoreThanOneExperimentFound": "Conflict: More than one active experiment found with name '%s'.",
+        "ExperimentAlreadyStopped": "Experiment '%s' is already in a stopped state."
     }
 }

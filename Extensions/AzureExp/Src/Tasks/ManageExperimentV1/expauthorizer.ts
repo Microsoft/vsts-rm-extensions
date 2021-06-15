@@ -39,11 +39,11 @@ export class ExpAuthorizer {
                 return accessToken;
             }
             else {
-                throw new Error(tl.loc('UnableToFetchAccessTokenNullResponse', JSON.stringify(response)));
+                throw new Error(tl.loc('UnableToFetchAccessTokenNullResponse', response));
             }
         }
         else {
-            throw new Error(tl.loc('UnableToFetchAccessToken', JSON.stringify(response.message), responseBody));
+            throw new Error(tl.loc('UnableToFetchAccessToken', response.message.statusCode, responseBody));
         }
     }
     

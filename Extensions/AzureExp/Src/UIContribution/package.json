@@ -1,17 +1,35 @@
 {
-  "name": "uicontribution",
+  "name": "expuicontribution",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "description": "Exp UI Contribution",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "buildWeb": "npm run clean && webpack",
+    "clean": "rimraf ./dist"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Microsoft Corporation",
+  "license": "MIT",
   "dependencies": {
-    "vss-web-extension-sdk": "^5.141.0"
+    "azure-devops-extension-api": "^1.157.0",
+    "azure-devops-extension-sdk": "^2.0.11",
+    "azure-devops-ui": "^1.160.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-spinner-material": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.17",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
+    "base64-inline-loader": "^1.1.1",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.2",
+    "node-sass": "^4.13.1",
+    "rimraf": "^3.0.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.2",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }

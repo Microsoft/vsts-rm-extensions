@@ -1,0 +1,33 @@
+.experiment-card {
+    margin-top: 8px;
+}
+
+.feature-card {
+    padding-bottom: 8px;
+    
+    .feature-card-content {
+        display: block;
+    }
+
+    .flight-card {
+        margin-top: 2px;
+        margin-bottom: 2px;
+
+        .airplane-solid-icon{
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+.progression {
+    .progression-card-content {
+        display: block;
+        .experiment-card {
+            margin-top: 2px;
+            margin-bottom: 8px;
+        }
+    }
+
+    margin-top: 12px;
+    margin-bottom: 12px;
+}

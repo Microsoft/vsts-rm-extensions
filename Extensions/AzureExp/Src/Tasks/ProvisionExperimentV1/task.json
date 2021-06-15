@@ -1,5 +1,5 @@
 {
-    "id": "B89A647B-E45F-4A86-BB85-E7019474AA1D",
+    "id": "2e02b7a6-8222-4a82-9be3-faf7e3e757d3",
     "name": "ProvisionExperiment",
     "friendlyName": "Provision Experiment",
     "description": "Provision Experiments in Control Tower",
@@ -19,11 +19,10 @@
     "inputs": [
         {
             "name": "ServiceConnectionId",
-            "aliases": ["azureSubscription"],
-            "type": "connectedService:AzureRM",
-            "label": "Azure Subscription",
+            "type": "connectedService:expserviceconnection",
+            "label": "Exp Service Connection",
             "required": true,
-            "helpMarkDown": "Select the Azure Resource Manager subscription for the deployment."
+            "helpMarkDown": "Select the Exp Service Connection for deployment."
         },
         {
             "name": "Action",
@@ -31,8 +30,8 @@
             "label": "Action",
             "required": true,
             "options": {
-			    "CreateFeature": "Create Feature Rollout",
-				"CreateProgression": "Create progression"
+                "CreateFeature": "Create Feature Rollout",
+                "CreateProgression": "Create progression"
             },
             "helpMarkDown": "Select the action you want to perform"
         },
@@ -42,7 +41,7 @@
             "label": "Feature Id",
             "required": true,
 			"visibleRule": "Action = CreateProgression",
-            "helpMarkDown": "Select the experiment you want to edit."
+            "helpMarkDown": "Feature Id of the feature in which the progression will be created"
         },
 	    {
             "name": "FeatureJsonPath",
@@ -71,8 +70,8 @@
         "BeginFeatureRollout": "Begin creating feature rollout.",
         "FeatureRolloutComplete": "Feature rollout is successfully created with id %s. Visit https://exp.microsoft.com/a/feature/%s for more details.",
         "BeginCreatingProgression": "Begin creating progression",
-        "ProgressionComplete": "Progression is successfully created with id {0}. Visit https://exp.microsoft.com/a/feature/%s for more details.",
+        "ProgressionComplete": "Progression is successfully created with id %s. Visit https://exp.microsoft.com/a/feature/%s for more details.",
         "UnableToFetchAccessTokenNullResponse": "Unable to fetch access token. The response body is empty. %s",
-        "UnableToFetchAccessToken": "Unable to fetch access token. Check if the service principal credentials are valid and have appropriate permissions. %s %s"
+        "UnableToFetchAccessToken": "Unable to fetch access token. Check if the service principal credentials are valid and have appropriate permissions. Status Code: %s %s"
     }
 }
