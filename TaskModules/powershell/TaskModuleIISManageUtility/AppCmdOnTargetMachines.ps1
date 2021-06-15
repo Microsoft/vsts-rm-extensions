@@ -43,7 +43,7 @@ function Test-WebsiteExist
     $command = "`"$appCmdPath`" $appCmdArgs"
     Write-Verbose "Checking website exists. Running command : $command"
 
-    $website = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs
+    $website = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs -Encoding ([System.Text.Encoding]::GetEncoding(1252))
 
     if($null -ne $website -and $website -like "*`"$siteName`"*")
     {
@@ -71,7 +71,7 @@ function Test-BindingExist
 
     Write-Verbose "Checking binding exists for website (`"$siteName`"). Running command : $command"
 
-    $sites = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs
+    $sites = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs -Encoding ([System.Text.Encoding]::GetEncoding(1252))
 
     $binding = [string]::Format("{0}/{1}:{2}:{3},", $protocol, $ipAddress, $port, $hostname)
 
@@ -107,7 +107,7 @@ function Test-AppPoolExist
 
     Write-Verbose "Checking application pool exists. Running command : $command"
 
-    $appPool = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs
+    $appPool = Invoke-VstsTool -Filename $appCmdPath -Arguments $appCmdArgs -Encoding ([System.Text.Encoding]::GetEncoding(1252))
 
     $appPoolName = $appPoolName.Replace('`', '``').Replace('"', '`"').Replace('$', '`$')
     if($null -ne $appPool -and $appPool -like "*`"$appPoolName`"*")
