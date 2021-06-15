@@ -33,6 +33,14 @@ Extensions/BitBucket/DownloadArtifactBitbucket/.vs/*
 Extensions/BitBucket/DownloadArtifactBitbucket/bin/*
 Extensions/BitBucket/DownloadArtifactBitbucket/obj/*
 
+## TaskBroker specific##
+TaskBroker/bin/*
+TaskBroker/obj/*
+TaskBroker/packages/*
+TaskBroker/src/.vs/*
+TaskBroker/tools/*
+TaskBroker/TestResults/*
+
 ## Nuget 
 nuget.exe
 
