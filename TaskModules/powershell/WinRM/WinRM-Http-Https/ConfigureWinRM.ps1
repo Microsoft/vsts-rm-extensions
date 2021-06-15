@@ -9,7 +9,8 @@
 param
 (
     [string] $hostname,
-    [string] $protocol
+    [string] $protocol,
+    [string] $thumbprint 
 )
 
 #################################################################################################################################
@@ -21,8 +22,11 @@ $winrmHttpPort=5985
 $winrmHttpsPort=5986
 
 $helpMsg = "Usage:
+            To configure WinRM over Https using a self-signed certificate:
+                ./ConfigureWinRM.ps1 <fqdn\ipaddress> https 
+
             To configure WinRM over Https:
-                ./ConfigureWinRM.ps1 <fqdn\ipaddress> https
+                ./ConfigureWinRM.ps1 <fqdn\ipaddress> https thumbprint
 
             To configure WinRM over Http:
                 ./ConfigureWinRM.ps1 <fqdn\ipaddress> http"
@@ -33,6 +37,11 @@ function Is-InputValid
     $isInputValid = $true
 
     if(-not $hostname -or ($protocol -ne "http" -and $protocol -ne "https"))
+    {
+        $isInputValid = $false
+    }
+
+    if($thumbprint -and $protocol -ne "https") 
     {
         $isInputValid = $false
     }
@@ -83,12 +92,38 @@ function Configure-WinRMHttpsListener
     Delete-WinRMListener
 
     # Create a test certificate
-    $thumbprint = (New-SelfSignedCertificate -DnsName $hostname -CertStoreLocation "cert:\LocalMachine\My").Thumbprint
-    if(-not $thumbprint)
+    if($thumbprint) 
     {
-        throw "Failed to create the test certificate."
-    }
+        $cert = Get-Item "Cert:\LocalMachine\My\$thumbprint"
+        
+        if(-not $cert.HasPrivateKey) {
+            throw "Private key for the security certificate ($thumbprint) is missing";
+        }
 
+        if($cert.NotBefore -gt [datetime]::Now) {
+            throw "The security certificate ($thumbprint) is not yet valid";
+        }
+
+        if($cert.NotAfter -lt [datetime]::Now) {
+            throw "The security certificate ($thumbprint) has expired";
+        }
+
+        if($cert.Subject -ne "CN=$hostname") {
+            throw "The security certificate ($thumbprint) has not issued for `"$hostname`"";
+        }
+        
+    } else {
+        if(-not $thumbprint)
+        {
+            $thumbprint = (New-SelfSignedCertificate -DnsName $hostname -CertStoreLocation "cert:\LocalMachine\My").Thumbprint
+        }
+
+        if(-not $thumbprint)
+        {
+            throw "Failed to create the test certificate."
+        }
+    }
+    
     # Configure WinRM
     $WinrmCreate= "winrm create --% winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname=`"$hostName`";CertificateThumbprint=`"$thumbPrint`"}"
     invoke-expression $WinrmCreate
