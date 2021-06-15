@@ -66,7 +66,7 @@ function Test-BindingExist
     )
 
     $appCmdPath, $iisVersion = Get-AppCmdLocation -regKeyPath $AppCmdRegKey
-    $appCmdArgs = ' list sites'
+    $appCmdArgs = [string]::Format(' list site /name:"{0}"',$siteName)
     $command = "`"$appCmdPath`" $appCmdArgs"
 
     Write-Verbose "Checking binding exists for website (`"$siteName`"). Running command : $command"
