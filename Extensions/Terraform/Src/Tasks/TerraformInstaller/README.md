@@ -23,13 +23,24 @@ The task can run on the following build agent operating systems:
 
 ### Parameters of the task
 
-* **Display name\*:** Provide a name to identify the task among others in your pipeline.
+* **Display name** (displayName) Provide a name to identify the task among others in your pipeline.
 
-* **Version\*:** Specify the exact version of Teraform to install.
-Example: 
-    To install Terraform version 0.11.4, use 0.11.4
+* **Version** (terraformVersion) Specify the exact version of Teraform to install.
+
+Example: To install Terraform version 0.12.24, specify 0.12.24 as the version.
+    
 For getting more details about exact version, refer [this link](https://releases.hashicorp.com/terraform/)
 
+### YAML example
+
+This example shows you how to leverage this task in a YAML-based pipeline in Azure DevOps:
+
+```YAML
+- task: TerraformInstaller@0
+  displayName: 'Install Terraform'
+  inputs:
+    terraformVersion: '0.12.24'
+ ```
 
 ### Output Variables
 
