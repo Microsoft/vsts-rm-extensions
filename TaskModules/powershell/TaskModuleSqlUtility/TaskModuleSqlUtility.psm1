@@ -24,13 +24,17 @@ Export-ModuleMember -Function @(
 # Special internal exception type to control the flow. Not currently intended
 # for public usage and subject to change. If the type has already
 # been loaded once, then it is not loaded again.
-Write-Verbose "Adding exceptions types."
-Add-Type -WarningAction SilentlyContinue -Debug:$false -TypeDefinition @'
-namespace TaskModuleSqlUtility
-{
-    public class TerminationException : System.Exception
-    {
-        public TerminationException(System.String message) : base(message) { }
-    }
-}
-'@
+
+#Write-Verbose "Adding exceptions types."
+
+# calling add-type will throw a system.invalidoperationexception if the environment variables size has grown beyond 64k
+
+#Add-Type -WarningAction SilentlyContinue -Debug:$false -TypeDefinition @'
+#namespace TaskModuleSqlUtility
+#{
+#    public class TerminationException : System.Exception
+#    {
+#        public TerminationException(System.String message) : base(message) { }
+#    }
+#}
+#'@
