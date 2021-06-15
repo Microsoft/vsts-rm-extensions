@@ -1,0 +1,175 @@
+{
+    "manifestVersion": 1,
+    "id": "vss-services-kayentacanaryjudge",
+    "name": "Kayenta Canary Judge",
+    "publisher": "ms-vscs-rm",
+    "version": "0.154.0",
+    "public": true,
+    "description": "Integrate Kayenta Canary Judge with Azure Pipelines",
+    "categories": [
+      "Azure Pipelines"
+    ],
+    "Tags": [
+      "Kayenta",
+      "Automated Canary Analysis",
+      "Canary",
+      "Release",
+      "Release Gates",
+      "DevOps",
+      "Pipelines"
+    ],
+    "targets": [
+      {
+        "id": "Microsoft.VisualStudio.Services.Cloud"
+      },
+      {
+        "id": "Microsoft.TeamFoundation.Server"
+      }
+    ],
+    "icons": {
+        "default": "images/icon.png"
+      },
+    "screenshots": [
+      {
+        "path": "images/gate_screenshot.png"
+      }
+    ],
+    "files": [
+          {
+            "path": "images/icon.png",
+            "addressable": true
+          },
+          {
+            "path": "images/execution_promote.png",
+            "addressable": true
+          },
+          {
+            "path": "images/execution_reject.png",
+            "addressable": true
+          },
+          {
+            "path": "images/kayenta_connection.png",
+            "addressable": true
+          },
+          {
+            "path": "images/input_analysisconfig.png",
+            "addressable": true
+          },
+          {
+            "path": "images/input_basic.png",
+            "addressable": true
+          },
+          {
+            "path": "images/input_threshold.png",
+            "addressable": true
+          },
+          {
+            "path": "images/input_scopes.png",
+            "addressable": true
+          },
+          {
+            "path": "Tasks/createCanaryAnalysisRequestV0"
+          }
+    ],
+    "content": {
+        "details": {
+          "path": "readme.md"
+        }
+      },
+    "contributions": [
+      {
+        "id": "kayenta-service-endpoint",
+        "description": "Kayenta Canary Judge",
+        "type": "ms.vss-endpoint.service-endpoint-type",
+        "targets": [
+          "ms.vss-endpoint.endpoint-types"
+        ],
+        "properties": {
+          "name": "kayenta",
+          "displayName": "Kayenta",
+          "url": {
+            "displayName": "Kayenta Url",
+            "helpText": "Url of the Kayenta instance to connect to."
+          },
+          "inputDescriptors": [
+            {
+              "id": "canaryConfigAccount",
+              "name": "Canary configuration account",
+              "description": "Canary configuration Account",
+              "inputMode": "textbox",
+              "isConfidential": false,
+              "validation": {
+                "isRequired": false,
+                "dataType": "string"
+              }
+            }
+          ], 
+          "dataSources": [
+            {
+              "name": "canaryConfig",
+              "target": "canaryConfigAccount",
+              "endpointUrl": "{{endpoint.url}}/canaryConfig?configurationAccountName={{endpoint.canaryConfigAccount}}",
+              "resultSelector": "jsonpath:$.[*]",
+              "resultTemplate": "{ \"Value\" : \"{{id}}\", \"DisplayValue\" : \"{{name}}\" }"
+            }
+          ],
+          "authenticationSchemes": [
+            {
+              "type": "ms.vss-endpoint.endpoint-auth-scheme-basic",
+              "inputDescriptors": [
+                {
+                  "id": "username",
+                  "name": "Username",
+                  "description": "Username for connecting to the endpoint",
+                  "inputMode": "textbox",
+                  "isConfidential": false,
+                  "validation": {
+                    "isRequired": false,
+                    "dataType": "string"
+                  }
+                },
+                {
+                  "id": "password",
+                  "name": "Password",
+                  "description": "Password",
+                  "inputMode": "passwordbox",
+                  "isConfidential": true,
+                  "validation": {
+                    "isRequired": false,
+                    "dataType": "string"
+                  }
+                }
+              ]
+            },
+            {
+                "type": "ms.vss-endpoint.endpoint-auth-scheme-token",
+                    "inputDescriptors": [
+                        {
+                            "id": "apitoken",
+                            "name": "API Token",
+                            "description": "API Token for connection to endpoint",
+                            "inputMode": "textbox",
+                            "isConfidential": true,
+                            "validation": {
+                                "isRequired": false,
+                                "dataType": "string"
+                            }
+                        }
+                    ]
+            }
+          ],
+          "helpMarkDown": "<a href=\"https://medium.com/netflix-techblog/automated-canary-analysis-at-netflix-with-kayenta-3260bc7acc69\" target=\"_blank\"><b>Learn More about Kayenta </b></a>"
+        }
+      },
+      {
+        "id": "kayentacanaryjudge-query-task",
+        "type": "ms.vss-distributed-task.task",
+        "targets": [
+          "ms.vss-distributed-task.tasks"
+        ],
+        "properties": {
+          "name": "Tasks/createCanaryAnalysisRequestV0"
+        }
+      }
+    ]
+}

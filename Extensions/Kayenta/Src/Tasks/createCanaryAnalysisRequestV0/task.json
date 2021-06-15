@@ -1,0 +1,225 @@
+{
+  "id": "13a91ac7-d17e-4ca6-a4c0-723df247dd1b",
+  "name": "createCanaryAnalysisRequest",
+  "friendlyName": "Kayenta Canary Judge",
+  "description": "Invokes Kayenta Judge For Automated Canary Analysis",
+  "author": "Microsoft",
+  "helpMarkDown": "",
+  "category": "Utility",      
+  "visibility": [
+    "Release"
+  ],
+  "runsOn": [
+    "ServerGate",
+    "Server"
+  ],
+  "version": {
+    "Major": 0,
+    "Minor": 154,     
+    "Patch": 0
+  },
+  "instanceNameFormat": "Kayenta Canary Judge",
+  "groups": [
+    {
+      "name": "thresholds",
+      "displayName": "Thresholds",
+      "isExpanded": true
+    },
+    {
+    "name": "analysisConfiguration",
+    "displayName": "Analysis configuration (in minutes)",
+    "isExpanded": false
+    },
+    {
+    "name": "queryScopes",
+    "displayName": "Query Scopes",
+    "isExpanded": false
+    }
+],
+  "inputs": [
+    {
+      "name": "KayentaConnection",
+      "type": "connectedService:kayenta",
+      "label": "Kayenta connection",
+      "defaultValue": "",
+      "required": "true",
+      "helpMarkDown": "Connection to the Kayenta instance used for canary analysis."
+    },
+    {
+      "name": "canaryConfig",
+      "type": "pickList",      
+      "label": "Canary config",
+      "required": "true",
+      "helpMarkDown": "Choose the canary-config for the analysis.",
+      "properties": {
+        "EditableOptions": "False"
+        }
+    },
+    {
+      "name": "marginalThreshold",
+      "type": "string",       
+      "label": "Marginal threshold",
+      "required": "false",
+      "defaultValue": "0",
+      "helpMarkDown": "In case of multiple judgements for a canary analysis, if any judgement run has a score below than marginal threshold, then the whole canary analysis fails, Ex: 75.0.",
+      "groupName": "thresholds"
+    },
+    {
+      "name": "passThreshold",
+      "type": "string",      
+      "label": "Pass threshold",
+      "required": "true",
+      "helpMarkDown": "The last canary judgement of the analysis must score higher than pass threshold for the analysis to be successful. Otherwise it fails, Ex: 95.0.",
+      "groupName": "thresholds"
+    },
+    {
+      "name": "lifetimeDurationMins",
+      "type": "string",      
+      "label": "Analysis lifetime duration",
+      "required": "true",
+      "helpMarkDown": "Canary analysis will continue for the given duration, Ex: 45",
+      "groupName": "analysisConfiguration"
+    },
+    {
+      "name": "lookbackMins",
+      "type": "string",       
+      "label": "Lookback",
+      "defaultValue": "0",
+      "required": "false",
+      "helpMarkDown":"If this value is supplied, judgements will be performed on a sliding time window: endTime - lookbackMins to startTime + (judgementNumber * interval). If this field is omitted, the judgements will be performed on a growing time window:startTime + (judgementNumber - 1 * interval) to startTime + (judgementNumber * interval). Here judgementNumber has initial value 1 and will increment after each judgement.", 
+      "groupName": "analysisConfiguration"
+    },
+    {
+      "name": "analysisIntervalMins",
+      "type": "string",    
+      "label": "Analysis interval",
+      "required": "true",
+      "helpMarkDown": "Judgement analysis will occur after each interval during the lifetime of analysis, Ex: 15.",
+      "groupName": "analysisConfiguration"
+    },
+    {
+      "name": "beginAfterMins",
+      "type": "string",    
+      "label": "Begin analysis after",
+      "required": "true",
+      "helpMarkDown": "Canary analysis will begin after this period, Ex: 10.",
+      "groupName": "analysisConfiguration"
+    },
+    {
+      "name": "queryScopeName",
+      "type": "string",       
+      "label": "Query scope",
+      "required": "true",
+      "helpMarkDown": "Set the scope of your queries. Ex: default",
+      "groupName": "queryScopes"
+    },
+    {
+      "name": "canaryScope",
+      "type": "string",       
+      "label": "Canary scope",
+      "required": "true",
+      "helpMarkDown": "The label/dimension will create canary queries, Ex: myapp-canary",
+      "groupName": "queryScopes"
+    },
+    {
+      "name": "canaryLocation",
+      "type": "string",       
+      "label": "Canary location",
+      "required": "false",
+      "helpMarkDown": "To further scope the query based on server location, Ex: india_south_east",
+      "groupName": "queryScopes"
+    },
+    {
+      "name": "baselineScope",
+      "type": "string",       
+      "label": "Baseline scope",
+      "required": "true",
+      "helpMarkDown": "The label/dimension will create baseline queries, Ex: myapp-baseline",
+      "groupName": "queryScopes"
+    },
+    {
+      "name": "baselineLocation",
+      "type": "string",       
+      "label": "Baseline location",
+      "required": "false",
+      "helpMarkDown": "To further scope the query based on server location, Ex: india_south_east",
+      "groupName": "queryScopes"
+    },
+    {
+     "name": "startTimeIso",
+     "type": "string",      
+     "label": "Query start-time (ISO format)",
+     "required": "false",
+     "helpMarkDown": "If supplied, this value will scope the query will fetch data-points starting from this time, Example: 2019-12-17T21:56:39.689Z",
+     "groupName": "queryScopes"
+    },
+    {
+     "name": "endTimeIso",
+     "type": "string",      
+     "label": "Query end-time (ISO format)",
+     "required": "false",
+     "helpMarkDown": "If supplied, this value will scope the query to fetch data-points upto this time,Example: 2019-12-17T21:56:39.689Z",
+     "groupName": "queryScopes"
+    },
+   {
+     "name": "step",
+     "type": "string",      
+     "label": "Step (seconds)",
+     "defaultValue": "60",
+     "required": "false",
+     "helpMarkDown": "Kayenta will scrape data after each step in one analysis interval. Ex: 10",
+     "groupName": "queryScopes"
+   },
+   {
+     "name": "additionalQueryParams",
+     "type": "multiLine",      
+     "label": "Additional query parameters",
+     "required": "false",
+     "helpMarkDown": "Introduces additional query parameters to further set the scope of your query, Example: \"org\":\"Azure Devops\"",
+     "groupName": "queryScopes",
+     "properties": {
+       "editorExtension": "ms.vss-services-azure.azure-servicebus-message-grid"
+      }
+   }
+ ],
+"dataSourceBindings": [{
+  "target": "canaryConfig",
+  "endpointId": "$(KayentaConnection)",
+  "dataSourceName": "canaryConfig",
+  "resultTemplate": "{ \"Value\" : \"{{id}}\", \"DisplayValue\" : \"{{name}}\" }"   
+}],
+  "execution": {
+    "HttpRequestChain": {
+       "Execute": [
+        {
+          "RequestInputs": {
+            "EndpointId": "$(KayentaConnection)",
+            "EndpointUrl": "$(endpoint.url)standalone_canary_analysis/$(canaryConfig)?configurationAccountName=$(endpoint.canaryConfigAccount)",
+            "Method": "POST",
+            "Body": "{\"analysisIntervalMins\":\"$(analysisIntervalMins)\",\"beginAfterMins\":\"$(beginAfterMins)\",\"lifetimeDurationMins\":\"$(lifetimeDurationMins)\",\"lookbackMins\":\"$(lookbackMins)\",\"scopes\":[{\"controlLocation\":\"$(baselineLocation)\",\"controlScope\":\"$(baselineScope)\",{{#if endTimeIso}}\"endTimeIso\":\"$(endTimeIso)\",{{/if}}\"experimentLocation\":\"$(canaryLocation)\",\"experimentScope\":\"$(canaryScope)\",{{#if additionalQueryParams}}\"extendedScopeParams\":$(additionalQueryParams),{{/if}}\"scopeName\":\"$(queryScopeName)\",{{#if startTimeIso}}\"startTimeIso\":\"$(startTimeIso)\",{{/if}}\"step\":\"$(step)\"}],{{#if siteLocal}}\"siteLocal\":$(siteLocal),{{/if}}\"thresholds\":{\"marginal\":\"$(marginalThreshold)\",\"pass\":\"$(passThreshold)\"}}",
+            "Headers": "{\"Content-Type\":\"application/json\", \"Accept\":\"application/json\"}",
+            "WaitForCompletion": "false",
+            "Expression": "eq(isNullOrEmpty(jsonpath('$.canaryAnalysisExecutionId')[0]),false)"
+          },
+          "ExecutionOptions": {
+            "OutputVariables": "{\"canaryAnalysisExecutionId\":\"jsonpath('$.canaryAnalysisExecutionId')[0]\"}",
+            "SkipSectionExpression": "eq(isNullOrEmpty(variables['canaryAnalysisExecutionId']),false)"
+          }
+        },
+        {
+          "RequestInputs": {
+            "EndpointId": "$(KayentaConnection)",
+            "EndpointUrl": "$(endpoint.url)standalone_canary_analysis/$(canaryAnalysisExecutionId)",
+            "Method": "GET",
+            "WaitForCompletion": "false",
+            "Expression": "eq(jsonpath('$.canaryAnalysisExecutionResult.didPassThresholds')[0],true)"
+          },
+          "ExecutionOptions": {
+            "ContinuePollingExpression" : "eq(jsonpath('$.executionStatus')[0],'RUNNING')",
+            "DurationBetweenRetries": "00:$(analysisIntervalMins):00"
+          }
+        }
+      ]
+    }
+  }
+}
