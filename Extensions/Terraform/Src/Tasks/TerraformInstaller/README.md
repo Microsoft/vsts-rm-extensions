@@ -19,7 +19,7 @@ The task can run on the following build agent operating systems:
 - MacOS
 - Linux
 
-** Terraform is already installed on hosted Ubuntu build agents (currently version 0.11.13). So, this task may not be used for these agents unless a different vesrion of Terraform is needed.
+** Terraform is already installed on hosted Ubuntu build agents (currently version 0.11.13). So, this task may not be used for these agents unless a different version of Terraform is needed.
 
 ### Parameters of the task
 
