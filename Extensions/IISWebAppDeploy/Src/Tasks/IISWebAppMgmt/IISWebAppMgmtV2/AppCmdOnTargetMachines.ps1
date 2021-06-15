@@ -678,6 +678,23 @@ function Update-VirtualDirectory
         [System.Management.Automation.PSCredential] $physicalPathAuthenticationCredentials
     )
 
+    if($physicalPathAuthentication -ieq "VDWindowsAuth") 
+    {
+        Update-VirtualDirectory-Using-Windows-Auth -virtualDirectoryName $virtualDirectoryName -physicalPath $physicalPath -physicalPathAuthenticationCredentials $physicalPathAuthenticationCredentials
+    }
+    else 
+    {
+        Update-VirtualDirectory-Pass-through-Authentication -virtualDirectoryName $virtualDirectoryName -physicalPath $physicalPath
+    }    
+}
+
+function Update-VirtualDirectory-Pass-through-Authentication
+{
+    param (
+        [string] [Parameter(Mandatory=$true)] $virtualDirectoryName,
+        [string] $physicalPath
+    )
+
     $appCmdArgs = [string]::Format(' set vdir /vdir.name:"{0}"', $virtualDirectoryName)
 
     if(-not [string]::IsNullOrWhiteSpace($physicalPath))
@@ -692,24 +709,48 @@ function Update-VirtualDirectory
         $appCmdArgs = [string]::Format("{0} -physicalPath:`"{1}`"", $appCmdArgs, $physicalPath)
     }
 
-    if($physicalPathAuthentication -ieq "VDWindowsAuth") 
+    $appCmdArgs = [string]::Format("{0} -userName:{1} -password:{2}", $appCmdArgs, $null, $null)
+    $appCmdPath, $iisVersion = Get-AppCmdLocation -regKeyPath $AppCmdRegKey
+    $command = "`"$appCmdPath`" $appCmdArgs"
+
+    Write-Verbose "Updating virtual directory properties. Running command : $command"
+    Run-Command -command $command
+}
+
+function Update-VirtualDirectory-Using-Windows-Auth
+{
+    param (
+        [string] [Parameter(Mandatory=$true)] $virtualDirectoryName,
+        [string] $physicalPath,
+        [System.Management.Automation.PSCredential] $physicalPathAuthenticationCredentials
+    )
+
+    $appCmdArgs = [string]::Format(' set vdir /vdir.name:"{0}"', $virtualDirectoryName)
+
+    if(-not [string]::IsNullOrWhiteSpace($physicalPath))
     {
-        $userName = $physicalPathAuthenticationCredentials.userName
-        $password = $physicalPathAuthenticationCredentials.GetNetworkCredential().password
-
-        if(-not [string]::IsNullOrWhiteSpace($userName))
+        $tmpPhysicalPath = $physicalPath.Replace("%SystemDrive%", "$env:SystemDrive")
+        Write-Verbose "Checking virtual directory physical path exists $tmpPhysicalPath"
+        if(!(Test-Path -Path $tmpPhysicalPath -Credential $physicalPathAuthenticationCredentials))
         {
-            $appCmdArgs = [string]::Format("{0} -userName:`"{1}`"", $appCmdArgs, $userName)
+            Write-Verbose "Creating virtual directory physical path $tmpPhysicalPath"
+            New-Item -ItemType Directory -Path $tmpPhysicalPath -Credential $physicalPathAuthenticationCredentials
         }
 
-        if(-not [string]::IsNullOrWhiteSpace($password))
-        {
-            $appCmdArgs = [string]::Format("{0} -password:`"{1}`"", $appCmdArgs, $password)
-        }
+        $appCmdArgs = [string]::Format("{0} -physicalPath:`"{1}`"", $appCmdArgs, $physicalPath)
     }
-    else 
+
+    $userName = $physicalPathAuthenticationCredentials.userName
+    $password = $physicalPathAuthenticationCredentials.GetNetworkCredential().password
+
+    if(-not [string]::IsNullOrWhiteSpace($userName))
     {
-        $appCmdArgs = [string]::Format("{0} -userName:{1} -password:{2}", $appCmdArgs, $null, $null)
+        $appCmdArgs = [string]::Format("{0} -userName:`"{1}`"", $appCmdArgs, $userName)
+    }
+
+    if(-not [string]::IsNullOrWhiteSpace($password))
+    {
+        $appCmdArgs = [string]::Format("{0} -password:`"{1}`"", $appCmdArgs, $password)
     }
 
     $appCmdPath, $iisVersion = Get-AppCmdLocation -regKeyPath $AppCmdRegKey
