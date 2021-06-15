@@ -4,7 +4,7 @@
 ### Overview
 
 The Terraform Tool Installer task acquires a specified version of [Terraform](https://www.terraform.io/) from the Internet or the tools cache and prepends it to the PATH of the Azure Pipelines Agent (hosted or private). Use this task to change the version of Terraform used in subsequent tasks like [Terraform](https://aka.ms/AA5jd98).
-Adding this task before the [Teraform task](https://aka.ms/AA5jd98) in a build definition ensures you are using that task with the right Terraform version.
+Adding this task before the [Terraform task](https://aka.ms/AA5jd98) in a build definition ensures you are using that task with the right Terraform version.
 
 
 ### Contact Information
