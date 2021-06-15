@@ -73,6 +73,10 @@ function getTerraformDownloadUrl(version: string): string {
         case "x32":
             architecture = "386";
             break;
+            
+        case "arm":
+            architecture = "arm";
+            break;
         
         default:
             throw new Error(tasks.loc("ArchitectureNotSupported", os.arch()));
