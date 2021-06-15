@@ -501,7 +501,7 @@ function Get-SqlPackageCmdArgs
         # validate publish profile
         if ([System.IO.Path]::GetExtension($publishProfile) -ne ".xml")
         {
-            throw "Invalid Publish Profile [ $publishProfile ] provided"
+            throw "Invalid Publish Profile [ $publishProfile ] provided, publish profiles must have a .xml extension"
         }
         $sqlPkgCmdArgs = [string]::Format('{0} /Profile:"{1}"', $sqlPkgCmdArgs, $publishProfile)
     }
