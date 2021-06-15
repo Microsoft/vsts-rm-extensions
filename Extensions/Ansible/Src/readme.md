@@ -22,7 +22,7 @@ If Ansible is installed on a remote machine, you would need to set up an [SSH en
 - A password can be used to authenticate to remote Linux machines, but this is not supported for Mac or OSX systems.
 - The public key must be pre-installed or copied to the remote machine.
 
-![Ansible SSH Endpoint](Images/ansible_endpoint.png)
+![Ansible SSH Endpoint](Images/ansible_endpoint.PNG)
 
 ## Task
 
@@ -30,11 +30,11 @@ Installing the extension adds the following Ansible task which runs a given Play
 
 When Ansible automation engine is located on an Agent machine:
 
-![Run Ansible Playbook](Images/ansible_screen_1.png)
+![Run Ansible Playbook](Images/ansible_screen_1.PNG)
 
 When Ansible automation engine is located on a remote machine:
 
-![Run Ansible Playbook](Images/ansible_screen_2.png)
+![Run Ansible Playbook](Images/ansible_screen_2.PNG)
 
 ## Task arguments
 
