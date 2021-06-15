@@ -705,13 +705,15 @@ gulp.task("test", gulp.series("testResources", function(){
             .pipe(mocha({ reporter: 'spec', ui: 'bdd', useColors: !tfBuild }));
     }
 
+    var terraformSuitePath = path.join(_testRoot,"Extensions/Terraform/Src/Tasks/TerraformTaskV1/Tests",'/_suite.js');
+    console.log(terraformSuitePath);
     var suitePath = path.join(_testRoot,"Extensions/" + options.suite + "/Tests/Tasks", options.suite + '/_suite.js');
     console.log(suitePath);
     var suitePath2 = path.join(_testRoot, "Extensions/" + options.suite + "/**/*Tests.js");
     console.log(suitePath2);
     var tfBuild = ('' + process.env['TF_BUILD']).toLowerCase() == 'true'
     var ignorePath = "!" + path.join(_testRoot, "Extensions",  "/**/UIContribution{,/**}");
-    return gulp.src([ suitePath, suitePath2, ignorePath ], { allowEmpty: true })
+    return gulp.src([ terraformSuitePath, suitePath, suitePath2, ignorePath ], { allowEmpty: true })
         .pipe(mocha({ reporter: 'spec', ui: 'bdd', useColors: !tfBuild }));
 }));
 
