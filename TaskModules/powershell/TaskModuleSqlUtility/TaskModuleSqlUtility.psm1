@@ -21,16 +21,16 @@ Export-ModuleMember -Function @(
         'Invoke-DacpacDeployment'
     )
 
-# Special internal exception type to control the flow. Not currently intended
-# for public usage and subject to change. If the type has already
-# been loaded once, then it is not loaded again.
-Write-Verbose "Adding exceptions types."
-Add-Type -WarningAction SilentlyContinue -Debug:$false -TypeDefinition @'
-namespace TaskModuleSqlUtility
-{
-    public class TerminationException : System.Exception
-    {
-        public TerminationException(System.String message) : base(message) { }
-    }
-}
-'@
+# # Special internal exception type to control the flow. Not currently intended
+# # for public usage and subject to change. If the type has already
+# # been loaded once, then it is not loaded again.
+# Write-Verbose "Adding exceptions types."
+# Add-Type -WarningAction SilentlyContinue -Debug:$false -TypeDefinition @'
+# namespace TaskModuleSqlUtility
+# {
+#     public class TerminationException : System.Exception
+#     {
+#         public TerminationException(System.String message) : base(message) { }
+#     }
+# }
+# '@
